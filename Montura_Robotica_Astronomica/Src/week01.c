@@ -128,6 +128,22 @@ int main(void)
     }
     //j=101
 
+    //ejercicio 1.6
+    uint8_t resultado =0;
+    while(0){
+    	resultado=42;
+    }
+    //resultado=0
+
+
+    resultado=0;
+
+    do{
+    	resultado=42;
+    } while(0);
+    //resultado=42
+
+
 
     while(1){
 
