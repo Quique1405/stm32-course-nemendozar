@@ -46,25 +46,6 @@ int main(void){
 	// Limpiamos la configuración del registro PUPDR para establecer el estado no pull up no pull down
 	GPIOA->PUPDR &= ~(0b11 << 10);
 
-
-
-	/**************************
-	 *CONFIGURACIÓN LED_BLINKY*
-	 **************************/
-
-	// Limpiamos el estado de los bits reservados para el puerto 6 del registro MODER del GPIOA
-	GPIOA->MODER &= ~(0b11 <<12);
-	// Establecemos PA 6 como salida (01)
-	GPIOA->MODER |= (0b01 << 12);
-	// Establecemos el tipo de salida como pull up - pull down (1)
-	GPIOA->OTYPER &= ~(0b1 <<6);
-	// Limpiamos el estado de la velocidad del pin
-	GPIOA->OSPEEDR &= ~(0b11 << 12);
-	// Establecemos la velocidad de conmutación en medio (01)
-	GPIOA->OSPEEDR |= (0b01 << 12);
-	// Limpiamos la configuración del registro PUPDR para establecer el estado no pull up no pull down
-	GPIOA->PUPDR &= ~(0b11 << 12);
-
 	/************************
 	 ***CONFIGURACIÓN TIM2***
 	 ************************/
@@ -86,30 +67,16 @@ int main(void){
 	// Activamos el contador con timer 2
 	TIM2->CR1 |= TIM_CR1_CEN;
 
-	/************************
-	 ***CONFIGURACIÓN TIM3***
-	 ************************/
-	// Encender la señal de reloj del tim3
-	RCC->APB1ENR |= RCC_APB1ENR_TIM3EN;
-	// Establecer el prescaler para que genere un pulso de 1ms
-	TIM3->PSC = 15999;
-	// Contar 250 pulsos para generar una señal de 4Hz
-	TIM3->ARR = 249;
-	// Limpiamos el contador
-	TIM3->CNT = 0;
-	// limpiamos la bandera del event-update
-	TIM3->SR &= ~TIM_SR_UIF;
-	// Activamos la interrupción del TIM3 por event-update
-	TIM3->DIER |= TIM_DIER_UIE;
-	// Matriculamos la interrupción del TIM3 en el NVIC
-	NVIC_EnableIRQ(TIM3_IRQn);
-	// Activamos el contador con timer 3
-	TIM3->CR1 |= TIM_CR1_CEN;
+
+
+
+
     while(1){
 
 
     }
 }
+
 
 /******************
  ***HANDLER TIM2***
@@ -122,19 +89,6 @@ void TIM2_IRQHandler(){
 
 		// limpiamos la bandera del event-update
 		TIM2->SR &= ~TIM_SR_UIF;
-	}
-}
-
-/******************
- ***HANDLER TIM3***
- ******************/
-void TIM3_IRQHandler(){
-	if (TIM3->SR & TIM_SR_UIF){
-
-		// Toogle a LED_BLINKT
-		GPIOA->ODR ^= (0b1 << 6);
-		// limpiamos la bandera del event-update
-		TIM3->SR &= ~TIM_SR_UIF;
 	}
 }
 
